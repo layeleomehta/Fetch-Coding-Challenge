@@ -15,5 +15,5 @@ data class Receipt(
     var purchaseTime: String,
     var total: Float,
     @OneToMany(mappedBy = "receipt", orphanRemoval = true, cascade = [CascadeType.ALL])
-    var items: Set<Item>
+    var items: MutableSet<Item>
 )

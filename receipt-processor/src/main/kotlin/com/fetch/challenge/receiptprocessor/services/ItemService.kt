@@ -10,7 +10,7 @@ class ItemService(
     private val idGeneratorService: IdGeneratorService,
     private val itemRepository: ItemRepository
 ) {
-    fun createItem(shortDescription: String, price: Float, receipt: Receipt): Item {
+    fun createItem(shortDescription: String, price: Float, receipt: Receipt): Item? {
         return itemRepository.save(
             Item(
                 null,

@@ -14,7 +14,7 @@ class ReceiptService(
         purchaseDate: String,
         purchaseTime: String,
         total: Float
-    ): Receipt {
+    ): Receipt? {
         return receiptRepository.save(
             Receipt(
                 null,
@@ -23,7 +23,7 @@ class ReceiptService(
                 purchaseDate,
                 purchaseTime,
                 total,
-                emptySet()
+                mutableSetOf()
             )
         )
     }
