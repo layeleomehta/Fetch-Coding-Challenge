@@ -4,16 +4,16 @@ import javax.persistence.*
 
 @Table
 @Entity
-data class Receipt(
+data class Item(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(columnDefinition = "serial")
     var id: Long?,
     var externalId: String,
-    var retailer: String,
-    var purchaseDate: String,
-    var purchaseTime: String,
-    var total: Float,
-    @OneToMany(mappedBy = "receipt", orphanRemoval = true, cascade = [CascadeType.ALL])
-    var items: Set<Item>
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "receipt_id", nullable = true)
+    var receipt: Receipt,
+    var shortDescription: String,
+    var price: Float
+
 )
