@@ -3,3 +3,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/fetch_challenge
     username: postgres
     password:
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
