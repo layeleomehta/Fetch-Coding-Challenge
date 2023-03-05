@@ -30,6 +30,8 @@ class ReceiptController(
         } ?: ResponseEntity.notFound().build()
     }
 
+    // processes a receipt by creating a unique Receipt entry in the DB, as well as a unique Item entry for
+    // every item purchased in the receipt, with reference to the Receipt entry created.
     @PostMapping("/process")
     fun processReceipt(@RequestBody requestBody: ProcessReceiptBody): ResponseEntity<Any> {
         receiptService.createReceipt(
