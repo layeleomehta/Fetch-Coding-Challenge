@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ReceiptRepository: JpaRepository<Receipt, Long> {
+    fun findByExternalId(externalId: String): Receipt?
 }

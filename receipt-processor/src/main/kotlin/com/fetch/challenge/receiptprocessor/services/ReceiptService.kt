@@ -27,4 +27,8 @@ class ReceiptService(
             )
         )
     }
+
+    fun findReceiptByExternalId(externalId: String): Receipt? {
+        return receiptRepository.findByExternalId(externalId)
+    }
 }

@@ -2,11 +2,15 @@ package com.fetch.challenge.receiptprocessor.controllers
 
 import com.fetch.challenge.receiptprocessor.controllers.models.ProcessReceiptBody
 import com.fetch.challenge.receiptprocessor.controllers.models.ProcessReceiptResponse
+import com.fetch.challenge.receiptprocessor.controllers.models.ReceiptResponse
 import com.fetch.challenge.receiptprocessor.services.ItemService
 import com.fetch.challenge.receiptprocessor.services.ReceiptService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.CrossOrigin
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -18,6 +22,14 @@ class ReceiptController(
     private val receiptService: ReceiptService,
     private val itemService: ItemService
 ) {
+
+    @GetMapping("/{id}")
+    fun getReceiptById(@PathVariable id: String): ResponseEntity<Any> {
+        return receiptService.findReceiptByExternalId(id)?.let {receipt ->
+            ResponseEntity.ok(ReceiptResponse(receipt))
+        } ?: ResponseEntity.notFound().build()
+    }
+
     @PostMapping("/process")
     fun processReceipt(@RequestBody requestBody: ProcessReceiptBody): ResponseEntity<Any> {
         receiptService.createReceipt(
@@ -36,7 +48,7 @@ class ReceiptController(
             }
             return ResponseEntity.ok(ProcessReceiptResponse(receipt))
         }
-        return ResponseEntity.ok("receipt model goes here")
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Receipt is invalid")
     }
 
 }
