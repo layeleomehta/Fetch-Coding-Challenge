@@ -1,11 +1,10 @@
-service: fetch-challenge
 runtime: java11
 entrypoint: java -Xmx64m -jar receipt-processor-0.0.1-SNAPSHOT.jar
 instance_class: F2
 
 env_variables:
   SPRING_DATASOURCE_USERNAME: 'postgres'
-  SPRING_DATASOURCE_PASSWORD: ''
+  SPRING_DATASOURCE_PASSWORD: 'password'
   SPRING_DATASOURCE_URL: 'jdbc:postgresql://google/fetch_challenge?cloudSqlInstance=sapient-metrics-379819:us-central1:fetch-challenge&socketFactory=com.google.cloud.sql.postgres.SocketFactory'
   SPRING_CLOUD_GCP_SQL_ENABLED: true
   SPRING_CLOUD_GCP_SQL_INSTANCECONNECTIONNAME: sapient-metrics-379819:us-central1:fetch-challenge

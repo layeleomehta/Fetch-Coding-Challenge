@@ -47,6 +47,11 @@ configure<com.google.cloud.tools.gradle.appengine.appyaml.AppEngineAppYamlExtens
 	stage {
 		setArtifact("build/libs/receipt-processor-0.0.1-SNAPSHOT.jar")
 	}
+
+	deploy {
+		setProjectId("sapient-metrics-379819")
+		setVersion("GCLOUD_CONFIG")
+	}
 }
 
 tasks.withType<KotlinCompile> {
