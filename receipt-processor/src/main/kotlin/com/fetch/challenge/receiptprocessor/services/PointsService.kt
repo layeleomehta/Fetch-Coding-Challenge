@@ -5,6 +5,8 @@ import com.fetch.challenge.receiptprocessor.database.models.Points
 import com.fetch.challenge.receiptprocessor.database.models.Receipt
 import org.springframework.stereotype.Service
 import java.util.regex.Pattern
+import kotlin.math.ceil
+import kotlin.math.roundToInt
 
 @Service
 class PointsService(
@@ -24,7 +26,7 @@ class PointsService(
 
     // receives the receipt object and determines how many points the receipt is worth.
     fun processPoints(receipt: Receipt): Int? {
-        return processTotalIsMultipleOfQuarterPoints("3495.50")
+        return processPurchaseTimeBetweenTwoAndFourPMPoints("14:67")
     }
 
     // returns one point for every alphanumeric character in the retailer name.
@@ -86,16 +88,55 @@ class PointsService(
         }
     }
 
-    private fun processItemDescriptionLengthMultipleOfThreePoints() {
+    // if trimmed item description is a multiple of three, returns the point value of nearest rounded up integer
+    // which is the result of multiplying the item price * 0.2. Returns 0 points otherwise.
+    private fun processItemDescriptionLengthMultipleOfThreePoints(
+        receiptItemDescription: String,
+        receiptItemPrice: Float
+    ): Int {
+        // trim whitespace
+        val trimmedDescriptionLength = receiptItemDescription.trim().length
 
+        return if(trimmedDescriptionLength % 3 == 0) {
+            ceil(receiptItemPrice * 0.2).toInt()
+        } else {
+            0
+        }
     }
 
-    private fun processPurchaseDateDayOddPoints() {
+    // return 6 points if the day in the purchase date is odd. 0 points otherwise.
+    private fun processPurchaseDateDayOddPoints(receiptPurchaseDate: String): Int {
+        // assuming the date will always be: "YY-MM-DD" format.
+        val days = receiptPurchaseDate.split("-").let { receiptPurchaseDateArray ->
+            receiptPurchaseDateArray[2].toInt()
+        }
 
+        return if(days % 2 == 1) {
+            6
+        } else {
+            0
+        }
     }
 
-    private fun processPurchaseTimeBetweenTwoAndFourPMPoints() {
+    // return 10 points if time of purchase is between 14:00 and 16:00. 0 otherwise.
+    private fun processPurchaseTimeBetweenTwoAndFourPMPoints(receiptPurchaseTime: String): Int {
+        // assuming time will always be in 24h format: "HH:MM".
+        val timeArray = receiptPurchaseTime.split(":")
+        val hour = timeArray[0].toInt()
+        val minute = timeArray[1].toInt()
 
+        // hour can only be 14 or 15, never 16
+        if(hour in 14..15){
+            // if time is 14:00, return 0 because it is not AFTER 2 pm.
+            return if(hour == 14 && minute == 0) {
+                0
+            } else {
+                10
+            }
+        }
+
+        // return 0 points because time is not between 2 pm and 4 pm.
+        return 0
     }
 
 }
