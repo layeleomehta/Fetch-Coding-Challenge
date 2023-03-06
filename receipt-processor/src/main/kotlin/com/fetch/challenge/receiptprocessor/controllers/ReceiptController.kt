@@ -60,6 +60,15 @@ class ReceiptController(
     @GetMapping("/{id}/points")
     fun calculateAndSavePoints(@PathVariable id: String): ResponseEntity<Any> {
         return receiptService.findReceiptByExternalId(id)?.let {receipt ->
+
+            // if receipt points already calculated from before, return the existing Points entry.
+            // avoids duplicate points entry creation bcuz Receipts to Points is a one-to-one mapping.
+            if(receipt.points != null) {
+                val points = receipt.points
+                return ResponseEntity.ok(points?.let { PointsResponse(it) })
+            }
+
+            // if points have not yet been calculated for the receipt, calculate and save into Points table.
             val totalPoints = pointsService.processPoints(receipt)
             pointsService.createPointsEntry(totalPoints, receipt)?.let {pointsEntry ->
                 return ResponseEntity.ok(PointsResponse(pointsEntry))
