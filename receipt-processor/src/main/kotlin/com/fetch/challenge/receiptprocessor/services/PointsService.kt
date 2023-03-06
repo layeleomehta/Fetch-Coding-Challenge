@@ -4,9 +4,7 @@ import com.fetch.challenge.receiptprocessor.database.dao.PointsRepository
 import com.fetch.challenge.receiptprocessor.database.models.Points
 import com.fetch.challenge.receiptprocessor.database.models.Receipt
 import org.springframework.stereotype.Service
-import java.util.regex.Pattern
 import kotlin.math.ceil
-import kotlin.math.roundToInt
 
 @Service
 class PointsService(
@@ -26,7 +24,32 @@ class PointsService(
 
     // receives the receipt object and determines how many points the receipt is worth.
     fun processPoints(receipt: Receipt): Int? {
-        return processPurchaseTimeBetweenTwoAndFourPMPoints("14:67")
+        var points = 0
+
+        // calculate and add points for alphanumeric character in retailer name.
+        points += processAlphanumericRetailerPoints(receipt.retailer)
+
+        // calculate and add points for round dollar amount with no cents.
+        points += processTotalIsRoundDollarAmountPoints(receipt.total)
+
+        // calculate and add points for multiple of 0.25.
+        points += processTotalIsMultipleOfQuarterPoints(receipt.total)
+
+        // calculate and add points for every two items on receipt.
+        points += processEveryTwoItemsPoints(receipt.items.size)
+
+        // calculate and add points for item description being a multiple of 3
+        for(item in receipt.items){
+            points += processItemDescriptionLengthMultipleOfThreePoints(item.shortDescription, item.price)
+        }
+
+        // calculate and add points for odd day in purchase date.
+        points += processPurchaseDateDayOddPoints(receipt.purchaseDate)
+
+        // calculate and add points for purchase time being between 2 pm and 4 pm.
+        points += processPurchaseTimeBetweenTwoAndFourPMPoints(receipt.purchaseTime)
+
+        return points
     }
 
     // returns one point for every alphanumeric character in the retailer name.

@@ -13,7 +13,7 @@ class ReceiptService(
         retailer: String,
         purchaseDate: String,
         purchaseTime: String,
-        total: Float
+        total: String
     ): Receipt? {
         return receiptRepository.save(
             Receipt(

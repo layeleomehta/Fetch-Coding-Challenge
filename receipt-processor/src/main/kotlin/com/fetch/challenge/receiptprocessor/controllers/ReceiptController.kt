@@ -40,7 +40,7 @@ class ReceiptController(
             requestBody.retailer,
             requestBody.purchaseDate,
             requestBody.purchaseTime,
-            requestBody.total.toFloat()
+            requestBody.total
         )?.let { receipt ->
             // create an item entry for each item, with reference to the created receipt.
             for(item in requestBody.items) {
@@ -60,7 +60,7 @@ class ReceiptController(
     fun calculateAndSavePoints(@PathVariable id: String): ResponseEntity<Any> {
         return receiptService.findReceiptByExternalId(id)?.let {receipt ->
             pointsService.processPoints(receipt)?.let {
-                return ResponseEntity.ok().build()
+                return ResponseEntity.ok(it)
             }
         } ?: ResponseEntity.notFound().build()
     }

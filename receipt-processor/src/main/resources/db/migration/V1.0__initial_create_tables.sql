@@ -5,7 +5,7 @@ CREATE TABLE receipt
 	retailer        VARCHAR(256) NOT NULL,
 	purchase_date   VARCHAR(256) NOT NULL,
 	purchase_time   VARCHAR(256) NOT NULL,
-	total           FLOAT NOT NULL
+	total           VARCHAR(256) NOT NULL
 );
 
 CREATE TABLE item
