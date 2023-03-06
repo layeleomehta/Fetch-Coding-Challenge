@@ -21,7 +21,7 @@ data class Receipt(
     var items: MutableSet<Item>,
     @JsonIgnore
     @OneToOne(mappedBy = "receipt", orphanRemoval = true, cascade = [CascadeType.ALL])
-    var points: Points
+    var points: Points?
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

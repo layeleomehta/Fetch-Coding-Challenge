@@ -4,6 +4,7 @@ import com.fetch.challenge.receiptprocessor.controllers.models.ProcessReceiptBod
 import com.fetch.challenge.receiptprocessor.controllers.models.ProcessReceiptResponse
 import com.fetch.challenge.receiptprocessor.controllers.models.ReceiptResponse
 import com.fetch.challenge.receiptprocessor.services.ItemService
+import com.fetch.challenge.receiptprocessor.services.PointsService
 import com.fetch.challenge.receiptprocessor.services.ReceiptService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -20,7 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 @CrossOrigin
 class ReceiptController(
     private val receiptService: ReceiptService,
-    private val itemService: ItemService
+    private val itemService: ItemService,
+    private val pointsService: PointsService
 ) {
 
     @GetMapping("/{id}")
@@ -51,6 +53,16 @@ class ReceiptController(
             return ResponseEntity.ok(ProcessReceiptResponse(receipt))
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Receipt is invalid")
+    }
+
+    // Calculates and saves the amount of points a receipt is worth from a specified receipt id.
+    @GetMapping("/{id}/points")
+    fun calculateAndSavePoints(@PathVariable id: String): ResponseEntity<Any> {
+        return receiptService.findReceiptByExternalId(id)?.let {receipt ->
+            pointsService.processPoints(receipt)?.let {
+                return ResponseEntity.ok().build()
+            }
+        } ?: ResponseEntity.notFound().build()
     }
 
 }

@@ -23,7 +23,8 @@ class ReceiptService(
                 purchaseDate,
                 purchaseTime,
                 total,
-                mutableSetOf()
+                mutableSetOf(),
+                null
             )
         )
     }
