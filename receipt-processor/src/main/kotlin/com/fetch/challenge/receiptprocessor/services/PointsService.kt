@@ -24,7 +24,7 @@ class PointsService(
 
     // receives the receipt object and determines how many points the receipt is worth.
     fun processPoints(receipt: Receipt): Int? {
-        return processTotalIsRoundDollarAmountPoints("35.35")
+        return null
     }
 
     // returns one point for every alphanumeric character in the retailer name.
@@ -44,16 +44,19 @@ class PointsService(
 
     // returns 50 points for round dollar amount, 0 points otherwise.
     private fun processTotalIsRoundDollarAmountPoints(total: String): Int {
-        // gets the cents by splitting on the dot in the 'total' string.
-        val cents = total
-        println(cents)
-        return 0
+        // gets the cents from the total.
+        // First replaces the '.' with a comma in the total, and splits on the comma, assigning the second val to cents.
+        // Kotlin has an issue splitting on a '.' because of regex, so this is a way around it.
+        val cents = total.replace(".", ",").let { commaSeparatedTotal ->
+            commaSeparatedTotal.split(",")[1]
+        }
+
         // round dollar value occurs only when there are no cents.
-//        return if(cents == "00"){
-//            50
-//        } else{
-//            0
-//        }
+        return if(cents == "00"){
+            50
+        } else{
+            0
+        }
     }
 
     private fun processTotalIsMultipleOfQuarterPoints() {
