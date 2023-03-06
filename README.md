@@ -43,8 +43,13 @@ This is an example response object:
 - **Assumption 1**:  All required fields in the receipt request body must be present in order to successfully process the receipt. Any omitted fields in the request body will result in the receipt not being processed. 
 - **Assumption 2**: The `purchaseDate` field in the receipt request body follows the `YY:MM:DD` convention, and it will always be a valid date.
 - **Assumption 3**: The `purchaseTime` field in the receipt request body follows the 24 hour time notation, and it will always be a valid time.
--  **Assumption 4**: The rule for adding 10 points if the time of purchase is between 2 PM and 4 PM does NOT include the actual time at 2 PM and 4 PM, only the times in between.  
+-  **Assumption 4**: The rule for adding 10 points if the time of purchase is between 2 PM and 4 PM does NOT include the actual times of 2 PM and 4 PM, only the times in between.  
 
-## Design & Architecture overview
+## Design & Architecture Overview
+The following ERD explains how the receipt data is stored. Here the Receipt table is a strong entity, with the Item and Points tables being weak entities which refer to the Receipt through a foreign key. Furthermore, there is a one-to-one relationship between Receipt and Points, because there should only be one points calculation for any given receipt. There is a one-to-many relationship between Receipt and Item, because a receipt can consist of multiple items. 
 
+<img width="753" alt="Screen Shot 2023-03-06 at 3 52 22 PM" src="https://user-images.githubusercontent.com/32559821/223275958-52192032-a9d4-43e0-8366-2bb8c0f50308.png">
 
+The code in this Spring Boot application follows the Controller-Service-Repository design pattern. The Receipt controller exposes the endpoint, which calls upon the Receipt, Item and Points services in order to process the receipt and calculate the points. 
+
+The receipt creation, item creation, points creation and points processing logic all occurs in the service layer. Finally, the repository layer reads from and writes to the database. This application uses Flyway as a database migration tool, which will automatically create the tables upon application start if the tables are not found. There are no tests written for this service. 
