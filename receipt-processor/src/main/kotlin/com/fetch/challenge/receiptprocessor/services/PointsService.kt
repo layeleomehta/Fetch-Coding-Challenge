@@ -71,11 +71,19 @@ class PointsService(
         } else{
             0
         }
-
     }
 
-    private fun processEveryTwoItemsPoints() {
-
+    // returns 5 points for every two items on the receipt.
+    private fun processEveryTwoItemsPoints(receiptItemsSize: Int): Int {
+        return if(receiptItemsSize % 2 == 0){
+            // if the number of items is even
+            // divide by two to get the number of times to add five points.
+            (receiptItemsSize / 2) * 5
+        } else{
+            // if the number of items is odd
+            // subtract one and divide by two to get the number of times to add five points.
+            ((receiptItemsSize-1) / 2) * 5
+        }
     }
 
     private fun processItemDescriptionLengthMultipleOfThreePoints() {
