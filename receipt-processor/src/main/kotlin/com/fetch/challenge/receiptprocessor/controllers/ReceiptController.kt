@@ -1,5 +1,6 @@
 package com.fetch.challenge.receiptprocessor.controllers
 
+import com.fetch.challenge.receiptprocessor.controllers.models.PointsResponse
 import com.fetch.challenge.receiptprocessor.controllers.models.ProcessReceiptBody
 import com.fetch.challenge.receiptprocessor.controllers.models.ProcessReceiptResponse
 import com.fetch.challenge.receiptprocessor.controllers.models.ReceiptResponse
@@ -59,8 +60,9 @@ class ReceiptController(
     @GetMapping("/{id}/points")
     fun calculateAndSavePoints(@PathVariable id: String): ResponseEntity<Any> {
         return receiptService.findReceiptByExternalId(id)?.let {receipt ->
-            pointsService.processPoints(receipt)?.let {
-                return ResponseEntity.ok(it)
+            val totalPoints = pointsService.processPoints(receipt)
+            pointsService.createPointsEntry(totalPoints, receipt)?.let {pointsEntry ->
+                return ResponseEntity.ok(PointsResponse(pointsEntry))
             }
         } ?: ResponseEntity.notFound().build()
     }

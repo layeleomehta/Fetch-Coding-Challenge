@@ -23,7 +23,7 @@ class PointsService(
     }
 
     // receives the receipt object and determines how many points the receipt is worth.
-    fun processPoints(receipt: Receipt): Int? {
+    fun processPoints(receipt: Receipt): Int {
         var points = 0
 
         // calculate and add points for alphanumeric character in retailer name.
