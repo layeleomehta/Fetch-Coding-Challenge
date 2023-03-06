@@ -24,7 +24,7 @@ class PointsService(
 
     // receives the receipt object and determines how many points the receipt is worth.
     fun processPoints(receipt: Receipt): Int? {
-        return null
+        return processTotalIsMultipleOfQuarterPoints("3495.50")
     }
 
     // returns one point for every alphanumeric character in the retailer name.
@@ -59,7 +59,18 @@ class PointsService(
         }
     }
 
-    private fun processTotalIsMultipleOfQuarterPoints() {
+    // returns 25 points for a multiple of 0.25, 0 points otherwise.
+    private fun processTotalIsMultipleOfQuarterPoints(total: String): Int {
+        val cents = total.replace(".", ",").let { commaSeparatedTotal ->
+            commaSeparatedTotal.split(",")[1]
+        }
+
+        // multiples of 0.25 only occur when cents are 00, 25, 50 or 75.
+        return if(cents == "00" || cents == "25" || cents == "50" || cents == "75"){
+            25
+        } else{
+            0
+        }
 
     }
 
