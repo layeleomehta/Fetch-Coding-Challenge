@@ -21,4 +21,37 @@ class PointsService(
         )
     }
 
+    // receives the receipt object and determines how many points the receipt is worth.
+    fun processPoints(receipt: Receipt): Int? {
+        return null
+    }
+
+    private fun processAlphanumericRetailerPoints() {
+
+    }
+
+    private fun processTotalIsRoundDollarAmountPoints() {
+
+    }
+
+    private fun processTotalIsMultipleOfQuarterPoints() {
+
+    }
+
+    private fun processEveryTwoItemsPoints() {
+
+    }
+
+    private fun processItemDescriptionLengthMultipleOfThreePoints() {
+
+    }
+
+    private fun processPurchaseDateDayOddPoints() {
+
+    }
+
+    private fun processPurchaseTimeBetweenTwoAndFourPMPoints() {
+
+    }
+
 }
