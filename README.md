@@ -8,6 +8,8 @@ The application has been tested, and successfully returns the expected responses
 
 ## Instructions: How To Use This Web Service
 
+**NOTE: The deployment is now disabled, the application is not live anymore. If you want to use it, you will have to clone the repo on your local and download the dependencies.**
+
 The service is deployed on Google App Engine, and it has a base URL of: 
 
     https://sapient-metrics-379819.uc.r.appspot.com
